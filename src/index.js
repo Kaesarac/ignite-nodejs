@@ -53,7 +53,7 @@ app.post("/account", (req, res) => {
 app.use(verifyCPFexists);
 app.get("/statement", (req, res) => {
   const { customer } = req;
-  return res.json(customers.statement);
+  return res.json(customer.statement);
 });
 app.post("/deposit", (req, res) => {
   const { description, amount } = req.body;
@@ -70,5 +70,36 @@ app.post("/deposit", (req, res) => {
 
   return res.status(201).send();
 });
+app.post("/withdraw", (req, res) => {
+  const { amount } = req.body;
+  const { customer } = req;
 
+  const balance = getBalance(customer.statement);
+
+  if (balance < amount) {
+    return res.status(400).json({ error: "Insufficient funds!" });
+  }
+
+  const statementOperation = {
+    amount,
+    created_at: new Date(),
+    type: "debit",
+  };
+
+  customer.statement.push(statementOperation);
+
+  return res.status(201).send();
+});
+app.get("/statement/date", (req, res) => {
+  const { customer } = req;
+  const { date } = req.query;
+
+  const dateFormat = new Date(date + "00:00");
+  const statement = customer.statement.filter(
+    (statement) =>
+      statement.created_at.toDateString() ===
+      new Date(dateFormat).toDateString()
+  );
+  return res.json(statement);
+});
 console.log(`Listening on PORT ${port}`);
