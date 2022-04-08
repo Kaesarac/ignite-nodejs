@@ -2,12 +2,15 @@
   "name": "fundamentos",
   "version": "1.0.0",
   "main": "index.js",
+  "repository": "https://github.com/Kaesarac/ignite-nodejs.git",
+  "author": "Augusto Cesar <augustocesar19silva@gmail.com>",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.js"
   },
   "dependencies": {
     "express": "^4.17.3",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "uuid": "^8.3.2"
   }
 }
