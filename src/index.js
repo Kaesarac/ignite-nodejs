@@ -55,5 +55,20 @@ app.get("/statement", (req, res) => {
   const { customer } = req;
   return res.json(customers.statement);
 });
+app.post("/deposit", (req, res) => {
+  const { description, amount } = req.body;
+  const { customer } = req;
+
+  const statementOperation = {
+    description,
+    amount,
+    created_at: new Date(),
+    type: "credit",
+  };
+
+  customer.statement.push(statementOperation);
+
+  return res.status(201).send();
+});
 
 console.log(`Listening on PORT ${port}`);
